@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<!-- Landing v90 — 26/11/2026 (khoi files stay v89, unchanged) -->
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#0f766e">
+<link rel="manifest" href="manifest.json">
+<title>Tự học Tin học THCS</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  html { background: #eef4f0; color-scheme: light; }
+  body {
+    margin: 0; min-height: 100vh;
+    background: #eef4f0; color: #17251f;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px 16px;
+  }
+  main { width: 100%; max-width: 420px; background: #ffffff; color: #17251f;
+    border: 1px solid #d5e2da; border-radius: 16px; padding: 28px 20px 24px;
+    text-align: center; }
+  h1 { margin: 0 0 8px; font-size: 1.5rem; line-height: 1.3; color: #17251f; }
+  p.sub { margin: 0 0 20px; font-size: 1.05rem; color: #33463c; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  button.grade {
+    min-height: 56px; font-size: 1.25rem; font-weight: 700;
+    color: #ffffff; background: #0f766e; border: 2px solid #0f766e;
+    border-radius: 12px; cursor: pointer; padding: 12px 8px;
+  }
+  button.grade:active { background: #0b5e57; }
+  #msg {
+    margin: 16px 0 0; padding: 12px; font-size: 1rem; line-height: 1.4;
+    color: #7f1d1d; background: #fef2f2; border: 1px solid #fecaca;
+    border-radius: 10px;
+  }
+  #loading { font-size: 1.1rem; color: #17251f; text-align: center; }
+  #btnBookmark {
+    grid-column: 1 / -1;
+    margin-top: 14px; min-height: 44px; font-size: 1rem; font-weight: 700;
+    color: #0f766e; background: #ffffff; border: 2px solid #0f766e;
+    border-radius: 12px; cursor: pointer; padding: 10px 14px; width: 100%;
+  }
+  #bmModal {
+    grid-column: 1 / -1;
+    margin-top: 14px; padding: 14px; text-align: left;
+    background: #f0fdfa; border: 1px solid #99f6e4; border-radius: 12px;
+  }
+  #bmModal a { color: #0f766e; font-weight: 700; word-break: break-all; }
+  #bmModal input { width: 100%; margin: 8px 0; padding: 8px; border: 1px solid #d5e2da; border-radius: 8px; box-sizing: border-box; }
+  #bmModal .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  #bmModal button.mini { min-height: 40px; font-weight: 700; color: #fff; background: #0f766e; border: 2px solid #0f766e; border-radius: 10px; cursor: pointer; padding: 8px 12px; }
+  #bmModal button.ghostmini { min-height: 40px; font-weight: 700; color: #0f766e; background: #fff; border: 2px solid #0f766e; border-radius: 10px; cursor: pointer; padding: 8px 12px; }
+  button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid #0f766e; outline-offset: 2px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main id="picker">
+  <h1>Tự học Tin học THCS</h1>
+  <p class="sub">Em học lớp mấy?</p>
+  <div class="grid">
+    <button type="button" class="grade" data-grade="6">Lớp 6</button>
+    <button type="button" class="grade" data-grade="7">Lớp 7</button>
+    <button type="button" class="grade" data-grade="8">Lớp 8</button>
+    <button type="button" class="grade" data-grade="9">Lớp 9</button>
+  <button type="button" id="btnBookmark">🔖 Lưu vào dấu trang</button>
+  <div id="bmModal" hidden>
+    <b>🔖 Lưu vào dấu trang</b>
+    <p style="margin:8px 0;">Kéo link này lên thanh dấu trang của trình duyệt:</p>
+    <a id="bmLink" draggable="true" href="?pick=1">🔖 Tự học Tin học THCS — Chọn khối lớp</a>
+    <p style="margin:8px 0;">Nhấn Ctrl+D để lưu trang này vào dấu trang (máy Windows).</p>
+    <input id="bmUrl" type="text" readonly value="">
+    <div class="row">
+      <button type="button" class="mini" id="btnBmCopy">Sao chép link</button>
+      <button type="button" class="ghostmini" id="btnBmClose">Đóng</button>
+      <span id="bmCopyMsg" style="font-size:.95rem;" aria-live="polite"></span>
+    </div>
+  </div>
+  </div>
+  <p id="msg" role="alert" hidden></p>
+  <noscript><p style="margin:16px 0 0;font-size:1rem;line-height:1.5;">Trang này cần bật JavaScript để chọn khối lớp. Mở trực tiếp: <a href="khoi-6.html">Lớp 6</a> · <a href="khoi-7.html">Lớp 7</a> · <a href="khoi-8.html">Lớp 8</a> · <a href="khoi-9.html">Lớp 9</a></p></noscript>
+</main>
+<p id="loading" hidden><span id="loadingText">Đang mở app…</span><br><button type="button" id="btnBackToPicker" style="margin-top:10px;min-height:40px;font-weight:700;color:#0f766e;background:#fff;border:2px solid #0f766e;border-radius:10px;cursor:pointer;padding:8px 12px;">Không phải lớp này? Chọn lại khối</button></p>
+<script>
+(function () {
+  var GRADES = ["6", "7", "8", "9"];
+  var picker = document.getElementById("picker");
+  var loading = document.getElementById("loading");
+  var msg = document.getElementById("msg");
+
+  var navCancelled = false;
+  var navController = null;
+
+  function isValid(g) { return GRADES.indexOf(g) !== -1; }
+
+  function getStored() {
+    try {
+      var v = window.localStorage && window.localStorage.getItem("ontin_grade");
+      return isValid(v) ? v : null;
+    } catch (e) { return null; }
+  }
+
+  function save(g) {
+    try { window.localStorage.setItem("ontin_grade", g); } catch (e) { /* localStorage bị chặn: vẫn chuyển được bằng nút/?grade= */ }
+  }
+
+  function getParam() {
+    try {
+      var p = new URLSearchParams(window.location.search).get("grade");
+      return isValid(p) ? p : null;
+    } catch (e) { return null; }
+  }
+
+
+  function hasPick() {
+    try {
+      return new URLSearchParams(window.location.search).has("pick");
+    } catch (e) { return false; }
+  }
+
+  // URL bookmark: trang chon khoi kem ?pick=1 — mo len luon hien 4 nut
+  // chon khoi, bo qua khoi da luu (may tinh dung chung o lop). Tu suy ra
+  // tu URL dang chay, khong hardcode domain. Chu y: trinh duyet hien dai
+  // KHONG cho trang tu them bookmark nen nut chi hien huong dan — day la
+  // cach chuan (keo link / Ctrl+D / sao chep link).
+  function bookmarkUrl() {
+    try {
+      var origin = window.location.origin;
+      if (origin && origin !== "null") return origin + window.location.pathname + "?pick=1";
+    } catch (e) {}
+    try { return window.location.href.split("?")[0] + "?pick=1"; } catch (e) { return "?pick=1"; }
+  }
+
+  function showPicker() {
+    if (loading) loading.hidden = true;
+    if (picker) picker.hidden = false;
+  }
+
+  function showLoading(grade) {
+    if (picker) picker.hidden = true;
+    if (loading) { var t = document.getElementById("loadingText"); if (t) t.textContent = "Đang mở app Lớp " + grade + "…"; loading.hidden = false; }
+  }
+
+  function showError(grade) {
+    showPicker();
+    if (msg) {
+      msg.textContent = "Chưa mở được file khối " + grade + ", em báo thầy/cô nhé.";
+      msg.hidden = false;
+    }
+  }
+
+  function go(grade) {
+    var url = "khoi-" + grade + ".html";
+    try { window.location.replace(url); }
+    catch (e) {
+      try { window.location.href = url; } catch (e2) { /* jsdom/test: replace đã được ghi nhận */ }
+    }
+  }
+
+  // Kiểm tra file khối trước khi chuyển.
+  // - fetch trả về ok -> chuyển.
+  // - fetch trả về 404/410 (đang online, lỗi rõ ràng) -> ở lại, báo lỗi.
+  // - fetch bị reject (mất mạng / offline) hoặc timeout -> vẫn chuyển,
+  //   vì file khối có thể đã nằm trong cache của service worker.
+  // - Trạng thái lỗi khác (vd 405 HEAD) -> vẫn chuyển, không chặn học sinh.
+  function checkAndGo(grade) {
+    navCancelled = false;
+    showLoading(grade);
+    if (typeof fetch !== "function") { go(grade); return; }
+    var settled = false;
+    var controller = null;
+    var timer = null;
+    try {
+      if (typeof AbortController !== "undefined") {
+        controller = new AbortController();
+        navController = controller;
+        timer = setTimeout(function () { try { controller.abort(); } catch (e) {} }, 2000);
+      }
+    } catch (e) { controller = null; }
+    var opts = { method: "HEAD", cache: "no-store" };
+    if (controller) opts.signal = controller.signal;
+    fetch("khoi-" + grade + ".html", opts).then(function (res) {
+      if (settled) return; settled = true;
+      if (timer) clearTimeout(timer);
+      if (navCancelled) return;
+      if (res && res.ok) { go(grade); }
+      else if (res && (res.status === 404 || res.status === 410)) { showError(grade); }
+      else { go(grade); }
+    }).catch(function () {
+      if (settled) return; settled = true;
+      if (timer) clearTimeout(timer);
+      if (navCancelled) return;
+      go(grade); // lỗi mạng / offline / timeout: vẫn chuyển (cache SW có thể có file)
+    });
+  }
+
+  // Thu tu: ?pick truoc (co -> luon hien picker, bo qua khoi da luu),
+  // roi ?grade= (ep khoi nhu cu), roi khoi da luu (chuyen thang nhu cu).
+  var pick = hasPick();
+  var param = pick ? null : getParam();
+  var target = param || (pick ? null : getStored());
+  if (param) save(param);
+  if (target) {
+    checkAndGo(target);
+  } else {
+    showPicker();
+  }
+
+
+  // Nut bookmark: mo modal huong dan; link bookmark luon kem ?pick=1.
+  var bmLink = document.getElementById("bmLink");
+  var bmUrlInput = document.getElementById("bmUrl");
+  var bmModal = document.getElementById("bmModal");
+  var bmMsg = document.getElementById("bmCopyMsg");
+  var bmUrl = bookmarkUrl();
+  if (bmLink) bmLink.href = bmUrl;
+  if (bmUrlInput) bmUrlInput.value = bmUrl;
+  function copyFallback(done) {
+    try {
+      if (!bmUrlInput) { done(false); return; }
+      bmUrlInput.value = bmUrl;
+      bmUrlInput.focus();
+      bmUrlInput.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      done(!!ok);
+    } catch (e) { done(false); }
+  }
+  function copyBookmark() {
+    function done(ok) {
+      if (bmMsg) bmMsg.textContent = ok ? "✅ Đã sao chép link!" : "❌ Chưa sao chép được, em bôi đen link rồi bấm Ctrl+C nhé.";
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(bmUrl).then(function () { done(true); }, function () { copyFallback(done); });
+        return;
+      }
+    } catch (e) { /* roi xuong fallback */ }
+    copyFallback(done);
+  }
+  var btnBack = document.getElementById("btnBackToPicker");
+  if (btnBack) btnBack.addEventListener("click", function () {
+    navCancelled = true;
+    if (navController) { try { navController.abort(); } catch (e) {} }
+    showPicker();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && bmModal && !bmModal.hidden) bmModal.hidden = true;
+  });
+
+  var btnBm = document.getElementById("btnBookmark");
+  if (btnBm) btnBm.addEventListener("click", function () { if (bmModal) bmModal.hidden = false; });
+  var btnBmClose = document.getElementById("btnBmClose");
+  if (btnBmClose) btnBmClose.addEventListener("click", function () { if (bmModal) bmModal.hidden = true; });
+  var btnBmCopy = document.getElementById("btnBmCopy");
+  if (btnBmCopy) btnBmCopy.addEventListener("click", copyBookmark);
+
+  var buttons = document.querySelectorAll("button.grade");
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener("click", function () {
+      var g = this.getAttribute("data-grade");
+      if (!isValid(g)) return;
+      save(g);
+      checkAndGo(g);
+    });
+  }
+})();
+</script>
+</body>
+</html>
